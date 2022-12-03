@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Allocation_Info">
+          <Key>
+            <PropertyRef Name="Allocation_Id" />
+          </Key>
+          <Property Name="Allocation_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Room_NO" Type="nchar" MaxLength="3" Nullable="false" />
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Damage_Info">
+          <Key>
+            <PropertyRef Name="Damge_Id" />
+          </Key>
+          <Property Name="Damge_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Damage_About" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="Damage_Details" Type="varchar" MaxLength="600" Nullable="false" />
+          <Property Name="Damage_Proof" Type="image" />
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="Room_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Leave_Info">
+          <Key>
+            <PropertyRef Name="Leave_Id" />
+          </Key>
+          <Property Name="Leave_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Destination" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Reason" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Leave_Date" Type="datetime" Nullable="false" />
+          <Property Name="Arrival_Date" Type="datetime" Nullable="false" />
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="Room_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profile_Info">
+          <Key>
+            <PropertyRef Name="Profile_Id" />
+          </Key>
+          <Property Name="Profile_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Profile_Photo" Type="image" />
+          <Property Name="Room_ID" Type="int" Nullable="false" />
+          <Property Name="Leave_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRegi">
+          <Key>
+            <PropertyRef Name="User_Id" />
+          </Key>
+          <Property Name="User_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Address" Type="varchar" MaxLength="700" />
+          <Property Name="Email" Type="varchar" MaxLength="60" />
+          <Property Name="ContactNo" Type="nchar" MaxLength="10" />
+          <Property Name="YOS" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <Association Name="FK_Allocation_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Allocation_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Damage_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Damage_Info" Type="Self.Damage_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Damage_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Damage_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Damage_Info" Type="Self.Damage_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Damage_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Leave_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Leave_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Leave_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Leave_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Profile_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable2">
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leave_Info">
+              <PropertyRef Name="Leave_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Leave_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseModelStoreContainer">
+          <EntitySet Name="Allocation_Info" EntityType="Self.Allocation_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Damage_Info" EntityType="Self.Damage_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leave_Info" EntityType="Self.Leave_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profile_Info" EntityType="Self.Profile_Info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRegi" EntityType="Self.UserRegi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Allocation_Info_ToTable" Association="Self.FK_Allocation_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegi" />
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Damage_Info_ToTable" Association="Self.FK_Damage_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegi" />
+            <End Role="Damage_Info" EntitySet="Damage_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Damage_Info_ToTable1" Association="Self.FK_Damage_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Damage_Info" EntitySet="Damage_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Leave_Info_ToTable" Association="Self.FK_Leave_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegi" />
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Leave_Info_ToTable1" Association="Self.FK_Leave_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable" Association="Self.FK_Profile_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegi" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable1" Association="Self.FK_Profile_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable2" Association="Self.FK_Profile_Info_ToTable2">
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Allocation_Info">
+          <Key>
+            <PropertyRef Name="Allocation_Id" />
+          </Key>
+          <Property Name="Allocation_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Room_NO" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserRegi" Relationship="Self.FK_Allocation_Info_ToTable" FromRole="Allocation_Info" ToRole="UserRegi" />
+          <NavigationProperty Name="Damage_Info" Relationship="Self.FK_Damage_Info_ToTable1" FromRole="Allocation_Info" ToRole="Damage_Info" />
+          <NavigationProperty Name="Leave_Info" Relationship="Self.FK_Leave_Info_ToTable1" FromRole="Allocation_Info" ToRole="Leave_Info" />
+          <NavigationProperty Name="Profile_Info" Relationship="Self.FK_Profile_Info_ToTable1" FromRole="Allocation_Info" ToRole="Profile_Info" />
+        </EntityType>
+        <EntityType Name="Damage_Info">
+          <Key>
+            <PropertyRef Name="Damge_Id" />
+          </Key>
+          <Property Name="Damge_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Damage_About" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Damage_Details" Type="String" MaxLength="600" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Damage_Proof" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="Room_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Allocation_Info" Relationship="Self.FK_Damage_Info_ToTable1" FromRole="Damage_Info" ToRole="Allocation_Info" />
+          <NavigationProperty Name="UserRegi" Relationship="Self.FK_Damage_Info_ToTable" FromRole="Damage_Info" ToRole="UserRegi" />
+        </EntityType>
+        <EntityType Name="Leave_Info">
+          <Key>
+            <PropertyRef Name="Leave_Id" />
+          </Key>
+          <Property Name="Leave_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Destination" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Leave_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Arrival_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="Room_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Allocation_Info" Relationship="Self.FK_Leave_Info_ToTable1" FromRole="Leave_Info" ToRole="Allocation_Info" />
+          <NavigationProperty Name="UserRegi" Relationship="Self.FK_Leave_Info_ToTable" FromRole="Leave_Info" ToRole="UserRegi" />
+          <NavigationProperty Name="Profile_Info" Relationship="Self.FK_Profile_Info_ToTable2" FromRole="Leave_Info" ToRole="Profile_Info" />
+        </EntityType>
+        <EntityType Name="Profile_Info">
+          <Key>
+            <PropertyRef Name="Profile_Id" />
+          </Key>
+          <Property Name="Profile_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Profile_Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Room_ID" Type="Int32" Nullable="false" />
+          <Property Name="Leave_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Allocation_Info" Relationship="Self.FK_Profile_Info_ToTable1" FromRole="Profile_Info" ToRole="Allocation_Info" />
+          <NavigationProperty Name="Leave_Info" Relationship="Self.FK_Profile_Info_ToTable2" FromRole="Profile_Info" ToRole="Leave_Info" />
+          <NavigationProperty Name="UserRegi" Relationship="Self.FK_Profile_Info_ToTable" FromRole="Profile_Info" ToRole="UserRegi" />
+        </EntityType>
+        <EntityType Name="UserRegi">
+          <Key>
+            <PropertyRef Name="User_Id" />
+          </Key>
+          <Property Name="User_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Address" Type="String" MaxLength="700" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="YOS" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Allocation_Info" Relationship="Self.FK_Allocation_Info_ToTable" FromRole="UserRegi" ToRole="Allocation_Info" />
+          <NavigationProperty Name="Damage_Info" Relationship="Self.FK_Damage_Info_ToTable" FromRole="UserRegi" ToRole="Damage_Info" />
+          <NavigationProperty Name="Leave_Info" Relationship="Self.FK_Leave_Info_ToTable" FromRole="UserRegi" ToRole="Leave_Info" />
+          <NavigationProperty Name="Profile_Info" Relationship="Self.FK_Profile_Info_ToTable" FromRole="UserRegi" ToRole="Profile_Info" />
+        </EntityType>
+        <Association Name="FK_Allocation_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Allocation_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Damage_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Damage_Info" Type="Self.Damage_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Damage_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Leave_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Leave_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable1">
+          <End Role="Allocation_Info" Type="Self.Allocation_Info" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Allocation_Info">
+              <PropertyRef Name="Allocation_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Room_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Damage_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Damage_Info" Type="Self.Damage_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Damage_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Leave_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Leave_Info">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable2">
+          <End Role="Leave_Info" Type="Self.Leave_Info" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leave_Info">
+              <PropertyRef Name="Leave_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Leave_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Profile_Info_ToTable">
+          <End Role="UserRegi" Type="Self.UserRegi" Multiplicity="1" />
+          <End Role="Profile_Info" Type="Self.Profile_Info" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegi">
+              <PropertyRef Name="User_Id" />
+            </Principal>
+            <Dependent Role="Profile_Info">
+              <PropertyRef Name="Profile_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Allocation_Info" EntityType="Self.Allocation_Info" />
+          <EntitySet Name="Damage_Info" EntityType="Self.Damage_Info" />
+          <EntitySet Name="Leave_Info" EntityType="Self.Leave_Info" />
+          <EntitySet Name="Profile_Info" EntityType="Self.Profile_Info" />
+          <EntitySet Name="UserRegis" EntityType="Self.UserRegi" />
+          <AssociationSet Name="FK_Allocation_Info_ToTable" Association="Self.FK_Allocation_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegis" />
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Damage_Info_ToTable1" Association="Self.FK_Damage_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Damage_Info" EntitySet="Damage_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Leave_Info_ToTable1" Association="Self.FK_Leave_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable1" Association="Self.FK_Profile_Info_ToTable1">
+            <End Role="Allocation_Info" EntitySet="Allocation_Info" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Damage_Info_ToTable" Association="Self.FK_Damage_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegis" />
+            <End Role="Damage_Info" EntitySet="Damage_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Leave_Info_ToTable" Association="Self.FK_Leave_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegis" />
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable2" Association="Self.FK_Profile_Info_ToTable2">
+            <End Role="Leave_Info" EntitySet="Leave_Info" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Profile_Info_ToTable" Association="Self.FK_Profile_Info_ToTable">
+            <End Role="UserRegi" EntitySet="UserRegis" />
+            <End Role="Profile_Info" EntitySet="Profile_Info" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="DatabaseEntities">
+          <EntitySetMapping Name="Allocation_Info">
+            <EntityTypeMapping TypeName="DatabaseModel.Allocation_Info">
+              <MappingFragment StoreEntitySet="Allocation_Info">
+                <ScalarProperty Name="Allocation_Id" ColumnName="Allocation_Id" />
+                <ScalarProperty Name="Room_NO" ColumnName="Room_NO" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Damage_Info">
+            <EntityTypeMapping TypeName="DatabaseModel.Damage_Info">
+              <MappingFragment StoreEntitySet="Damage_Info">
+                <ScalarProperty Name="Damge_Id" ColumnName="Damge_Id" />
+                <ScalarProperty Name="Damage_About" ColumnName="Damage_About" />
+                <ScalarProperty Name="Damage_Details" ColumnName="Damage_Details" />
+                <ScalarProperty Name="Damage_Proof" ColumnName="Damage_Proof" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+                <ScalarProperty Name="Room_ID" ColumnName="Room_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leave_Info">
+            <EntityTypeMapping TypeName="DatabaseModel.Leave_Info">
+              <MappingFragment StoreEntitySet="Leave_Info">
+                <ScalarProperty Name="Leave_Id" ColumnName="Leave_Id" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Leave_Date" ColumnName="Leave_Date" />
+                <ScalarProperty Name="Arrival_Date" ColumnName="Arrival_Date" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+                <ScalarProperty Name="Room_ID" ColumnName="Room_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profile_Info">
+            <EntityTypeMapping TypeName="DatabaseModel.Profile_Info">
+              <MappingFragment StoreEntitySet="Profile_Info">
+                <ScalarProperty Name="Profile_Id" ColumnName="Profile_Id" />
+                <ScalarProperty Name="Profile_Photo" ColumnName="Profile_Photo" />
+                <ScalarProperty Name="Room_ID" ColumnName="Room_ID" />
+                <ScalarProperty Name="Leave_ID" ColumnName="Leave_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRegis">
+            <EntityTypeMapping TypeName="DatabaseModel.UserRegi">
+              <MappingFragment StoreEntitySet="UserRegi">
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="YOS" ColumnName="YOS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
